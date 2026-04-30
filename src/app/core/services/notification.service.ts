@@ -7,7 +7,7 @@ import { Notification } from '../models/notification.model';
   providedIn: 'root'
 })
 export class NotificationService {
-  private readonly BASE_URL = 'http://20.193.128.7:8989/api/notifications';
+  private readonly BASE_URL = '/api/api/notifications';
 
   constructor(private http: HttpClient) {}
 

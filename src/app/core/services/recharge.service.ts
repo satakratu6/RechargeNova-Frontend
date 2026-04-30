@@ -7,7 +7,7 @@ import { RechargeRequest, RechargeResponse } from '../models/recharge.model';
   providedIn: 'root'
 })
 export class RechargeService {
-  private readonly BASE_URL = 'http://20.193.128.7:8989/recharges';
+  private readonly BASE_URL = '/api/recharges';
 
   constructor(private http: HttpClient) {}
 

@@ -7,7 +7,7 @@ import { UserResponse } from '../models/auth.model';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly BASE_URL = 'http://20.193.128.7:8989/users';
+  private readonly BASE_URL = '/api/users';
 
   constructor(private http: HttpClient) {}
 

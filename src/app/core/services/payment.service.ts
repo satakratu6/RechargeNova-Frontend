@@ -16,7 +16,7 @@ export interface PaymentResponse {
   providedIn: 'root'
 })
 export class PaymentService {
-  private readonly BASE_URL = 'http://20.193.128.7:8989/api/payments';
+  private readonly BASE_URL = '/api/api/payments';
 
   constructor(private http: HttpClient) {}
 

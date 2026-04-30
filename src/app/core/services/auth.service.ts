@@ -7,7 +7,7 @@ import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.mode
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly AUTH_URL = 'http://20.193.128.7:8989/users'; // Gateway URL
+  private readonly AUTH_URL = '/api/users'; // Gateway URL
   
   // Signals for state management
   private currentUserSignal = signal<AuthResponse | null>(this.getStoredAuth());
