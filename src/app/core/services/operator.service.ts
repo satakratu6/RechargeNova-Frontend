@@ -7,7 +7,7 @@ import { Operator, Plan } from '../models/operator.model';
   providedIn: 'root'
 })
 export class OperatorService {
-  private readonly BASE_URL = 'http://localhost:8989'; // Gateway URL
+  private readonly BASE_URL = 'http://20.193.128.7:8989'; // Gateway URL
 
   constructor(private http: HttpClient) {}
 
