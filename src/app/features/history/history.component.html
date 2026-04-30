@@ -92,8 +92,11 @@
               <p class="text-slate-400 dark:text-gray-700 text-xs mt-1">Try adjusting your search or filter</p>
             </div>
 
-            <!-- Table header -->
-            <div *ngIf="!isLoading && filteredHistory().length > 0" class="grid grid-cols-5 px-6 py-4 border-b border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02]">
+            <!-- Scrollable Table Container -->
+            <div class="overflow-x-auto">
+              <div class="min-w-[700px]">
+                <!-- Table header -->
+                <div *ngIf="!isLoading && filteredHistory().length > 0" class="grid grid-cols-5 px-6 py-4 border-b border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02]">
               <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">Status</span>
               <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">Mobile</span>
               <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">Amount</span>
@@ -120,6 +123,8 @@
               <span class="text-sm font-black text-slate-900 dark:text-white">₹{{ tx.amount }}</span>
               <span class="text-sm text-slate-500 dark:text-gray-400 font-medium">{{ tx.createdAt }}</span>
               <span class="text-xs text-slate-400 dark:text-gray-600 font-mono font-medium">#{{ tx.id }}</span>
+            </div>
+              </div>
             </div>
           </div>
         </div>
