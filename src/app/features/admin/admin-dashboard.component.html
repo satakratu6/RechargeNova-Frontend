@@ -1,0 +1,80 @@
+    <div class="flex h-screen bg-slate-50 dark:bg-[#03010a] overflow-hidden transition-colors duration-500">
+      <app-sidebar></app-sidebar>
+
+      <main class="flex-1 overflow-y-auto">
+        <!-- Header -->
+        <div class="sticky top-0 z-10 px-8 py-5 border-b border-slate-200 dark:border-white/5 bg-slate-50/80 dark:bg-[#03010a]/80 backdrop-blur-xl transition-colors duration-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Admin Console</h1>
+              <p class="text-sm text-slate-500 dark:text-gray-500 mt-0.5">Global platform management and oversight</p>
+            </div>
+            <div class="flex items-center gap-[1.5rem]">
+              <app-theme-switcher></app-theme-switcher>
+              <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase tracking-widest border border-amber-500/20 shadow-sm">System Live</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-8 page-enter max-w-6xl mx-auto">
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass p-6 rounded-3xl border-slate-200 dark:border-white/5 bg-white dark:bg-white/5 relative overflow-hidden group">
+              <div class="absolute -right-4 -top-4 w-24 h-24 bg-violet-500/10 rounded-full blur-2xl group-hover:bg-violet-500/20 transition-all"></div>
+              <p class="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mb-1">Total Operators</p>
+              <h2 class="text-3xl font-black text-slate-900 dark:text-white">{{ stats().operators }}</h2>
+              <div class="mt-4 flex items-center gap-2 text-xs font-bold text-violet-600 dark:text-violet-400">
+                <span>Active & Configured</span>
+              </div>
+            </div>
+
+            <div class="glass p-6 rounded-3xl border-slate-200 dark:border-white/5 bg-white dark:bg-white/5 relative overflow-hidden group">
+              <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+              <p class="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mb-1">Success Rate</p>
+              <h2 class="text-3xl font-black text-slate-900 dark:text-white">{{ stats().successRate }}%</h2>
+              <div class="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-green-400">
+                <span>Transaction health</span>
+              </div>
+            </div>
+
+            <div class="glass p-6 rounded-3xl border-slate-200 dark:border-white/5 bg-white dark:bg-white/5 relative overflow-hidden group">
+              <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
+              <p class="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mb-1">Revenue Volume</p>
+              <h2 class="text-3xl font-black text-slate-900 dark:text-white">₹{{ stats().revenue }}</h2>
+              <div class="mt-4 flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400">
+                <span>Total processed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div routerLink="/admin/operators" class="group glass p-8 rounded-[2.5rem] border-slate-200 dark:border-white/5 hover:border-violet-500/30 bg-white dark:bg-white/5 cursor-pointer transition-all hover:translate-y-[-4px]">
+              <div class="w-14 h-14 bg-violet-100 dark:bg-violet-500/10 rounded-2xl flex items-center justify-center text-violet-600 dark:text-violet-400 mb-6 group-hover:scale-110 transition-transform">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+              <h3 class="text-xl font-black text-slate-900 dark:text-white mb-2">Operator Management</h3>
+              <p class="text-sm text-slate-500 dark:text-gray-500">Add new operators, update plans, and configure network details.</p>
+              <div class="mt-6 flex items-center gap-2 text-xs font-black text-violet-600 dark:text-violet-400 uppercase tracking-widest">
+                Manage Operators →
+              </div>
+            </div>
+
+            <div routerLink="/admin/transactions" class="group glass p-8 rounded-[2.5rem] border-slate-200 dark:border-white/5 hover:border-blue-500/30 bg-white dark:bg-white/5 cursor-pointer transition-all hover:translate-y-[-4px]">
+              <div class="w-14 h-14 bg-blue-100 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+              </div>
+              <h3 class="text-xl font-black text-slate-900 dark:text-white mb-2">Transaction Monitor</h3>
+              <p class="text-sm text-slate-500 dark:text-gray-500">Monitor all payment activity with full history and status filters.</p>
+              <div class="mt-6 flex items-center gap-2 text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">
+                View Transactions →
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>

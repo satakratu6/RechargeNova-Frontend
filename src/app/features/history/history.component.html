@@ -1,0 +1,127 @@
+    <div class="flex h-screen bg-slate-50 dark:bg-[#03010a] overflow-hidden transition-colors duration-500">
+      <app-sidebar></app-sidebar>
+
+      <main class="flex-1 overflow-y-auto">
+        <!-- Header -->
+        <div class="sticky top-0 z-10 px-8 py-5 border-b border-slate-200 dark:border-white/5 flex items-center justify-between bg-slate-50/80 dark:bg-[#03010a]/80 backdrop-blur-xl transition-colors duration-500">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Transactions</h1>
+            <p class="text-sm text-slate-500 dark:text-gray-500 mt-0.5">Your complete recharge history</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <!-- Search -->
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <input type="text" [(ngModel)]="searchTerm" placeholder="Search by number..." class="input-nova pl-10 py-2.5 text-sm w-56">
+            </div>
+            <!-- Filter badges -->
+            <div class="flex gap-2">
+              <button *ngFor="let f of filters" (click)="activeFilter = f"
+                class="px-3 py-2 rounded-xl text-xs font-bold transition-all duration-200 border"
+                [style.background]="activeFilter === f ? 'rgba(124,58,237,0.1)' : ''"
+                [class.bg-white]="activeFilter !== f"
+                [class.dark:bg-white/5]="activeFilter !== f"
+                [class.text-violet-600]="activeFilter === f"
+                [class.dark:text-violet-300]="activeFilter === f"
+                [class.text-slate-500]="activeFilter !== f"
+                [class.dark:text-gray-500]="activeFilter !== f"
+                [class.border-violet-500]="activeFilter === f"
+                [class.border-slate-200]="activeFilter !== f"
+                [class.dark:border-white/10]="activeFilter !== f">
+                {{ f }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-8 page-enter">
+          <!-- Summary cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+            <div class="glass rounded-2xl p-5 flex items-center gap-4">
+              <div class="w-11 h-11 nova-gradient rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-violet-500/20">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-2xl font-black text-slate-900 dark:text-white">{{ history().length }}</p>
+                <p class="text-xs text-slate-500 dark:text-gray-500 font-bold uppercase tracking-widest mt-0.5">Total Recharges</p>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-5 flex items-center gap-4">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10">
+                <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-2xl font-black text-slate-900 dark:text-white">{{ successCount() }}</p>
+                <p class="text-xs text-slate-500 dark:text-gray-500 font-bold uppercase tracking-widest mt-0.5">Successful</p>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-5 flex items-center gap-4">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-pink-500/10">
+                <svg class="w-5 h-5 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-2xl font-black text-slate-900 dark:text-white">₹{{ totalSpent() }}</p>
+                <p class="text-xs text-slate-500 dark:text-gray-500 font-bold uppercase tracking-widest mt-0.5">Total Spent</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="glass rounded-3xl overflow-hidden border-slate-200 dark:border-white/5">
+            <!-- Loading -->
+            <div *ngIf="isLoading" class="p-8 space-y-3">
+              <div *ngFor="let _ of [1,2,3,4,5]" class="h-16 rounded-2xl shimmer"></div>
+            </div>
+
+            <!-- Empty -->
+            <div *ngIf="!isLoading && filteredHistory().length === 0" class="flex flex-col items-center justify-center py-20">
+              <div class="w-16 h-16 glass rounded-2xl flex items-center justify-center mb-5">
+                <svg class="w-7 h-7 text-slate-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+              </div>
+              <p class="text-slate-500 dark:text-gray-500 font-medium">No transactions found</p>
+              <p class="text-slate-400 dark:text-gray-700 text-xs mt-1">Try adjusting your search or filter</p>
+            </div>
+
+            <!-- Table header -->
+            <div *ngIf="!isLoading && filteredHistory().length > 0" class="grid grid-cols-5 px-6 py-4 border-b border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02]">
+              <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">Status</span>
+              <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">Mobile</span>
+              <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">Amount</span>
+              <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">Date</span>
+              <span class="text-xs font-bold text-slate-500 dark:text-gray-600 uppercase tracking-widest">TX ID</span>
+            </div>
+
+            <!-- Rows -->
+            <div *ngFor="let tx of filteredHistory(); trackBy: trackById"
+              class="grid grid-cols-5 items-center px-6 py-5 border-b border-slate-100 dark:border-white/[0.04] hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors group">
+              <div>
+                <span [ngClass]="{
+                  'badge-success': tx.status === 'SUCCESS',
+                  'badge-failed': tx.status === 'FAILED',
+                  'badge-pending': tx.status === 'PENDING'
+                }">{{ tx.status }}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 nova-gradient rounded-xl flex items-center justify-center text-white text-[10px] font-black shrink-0 shadow-lg shadow-violet-500/10">
+                  {{ tx.mobileNumber.slice(-2) }}
+                </div>
+                <span class="text-sm font-bold text-slate-700 dark:text-white">+91 {{ tx.mobileNumber }}</span>
+              </div>
+              <span class="text-sm font-black text-slate-900 dark:text-white">₹{{ tx.amount }}</span>
+              <span class="text-sm text-slate-500 dark:text-gray-400 font-medium">{{ tx.createdAt }}</span>
+              <span class="text-xs text-slate-400 dark:text-gray-600 font-mono font-medium">#{{ tx.id }}</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>

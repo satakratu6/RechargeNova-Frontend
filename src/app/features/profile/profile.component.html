@@ -1,0 +1,110 @@
+    <div class="flex h-screen bg-slate-50 dark:bg-[#03010a] overflow-hidden transition-colors duration-500">
+      <app-sidebar class="h-full shrink-0"></app-sidebar>
+
+      <main class="flex-1 overflow-y-auto">
+        <!-- Dashboard Header -->
+        <div class="sticky top-0 z-30 px-8 py-5 border-b border-slate-200 dark:border-white/5 bg-white/80 dark:bg-[#03010a]/80 backdrop-blur-xl transition-colors duration-500">
+          <div class="flex items-center justify-between max-w-4xl mx-auto">
+            <div>
+              <h1 class="text-xl font-bold text-slate-900 dark:text-white">Account Settings</h1>
+              <p class="text-sm text-slate-500 dark:text-gray-500">Manage your profile and security preferences</p>
+            </div>
+            <app-theme-switcher></app-theme-switcher>
+          </div>
+        </div>
+
+        <div class="p-8 pb-16 max-w-4xl mx-auto w-full space-y-8 page-enter">
+          
+          <!-- Loading State -->
+          <div *ngIf="isLoading()" class="space-y-6 animate-pulse">
+            <div class="h-40 rounded-2xl bg-slate-200 dark:bg-white/5"></div>
+            <div class="h-32 rounded-2xl bg-slate-200 dark:bg-white/5"></div>
+            <div class="h-32 rounded-2xl bg-slate-200 dark:bg-white/5"></div>
+          </div>
+
+          <ng-container *ngIf="!isLoading()">
+            <!-- Profile Identity Section -->
+            <div class="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm">
+              <!-- Banner -->
+              <div class="h-32 bg-gradient-to-r from-violet-600 via-indigo-600 to-fuchsia-600"></div>
+              
+              <!-- Identity Info -->
+              <div class="px-8 pb-8">
+                <div class="flex items-end gap-6 -mt-10">
+                  <!-- Avatar Overlay -->
+                  <div class="relative group cursor-pointer">
+                    <div class="w-32 h-32 rounded-2xl bg-white dark:bg-slate-800 p-1.5 shadow-xl">
+                      <div class="w-full h-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                        <img *ngIf="user()?.profileImageUrl" [src]="user()?.profileImageUrl" class="w-full h-full object-cover">
+                        <span *ngIf="!user()?.profileImageUrl" class="text-4xl font-black text-slate-300">{{ user()?.name?.[0]?.toUpperCase() }}</span>
+                        
+                        <!-- Upload Overlay -->
+                        <div (click)="triggerFileInput()" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
+                          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="file" id="profilePicInput" class="hidden" (change)="onFileSelected($event)" accept="image/*">
+                  </div>
+
+                  <!-- Name and Role -->
+                  <div class="flex-1 mb-2">
+                    <div class="flex items-center gap-3">
+                      <h2 class="text-2xl font-bold text-slate-900 dark:text-white">{{ user()?.name }}</h2>
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 uppercase tracking-wider">
+                        {{ user()?.role }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Personal Account · Active</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Details Grid -->
+            <div class="grid grid-cols-1 gap-6">
+              
+              <!-- Communication Card -->
+              <div class="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-white/5 p-8 shadow-sm">
+                <div class="flex items-center gap-2 mb-6 text-slate-400 dark:text-slate-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <h3 class="text-xs font-bold uppercase tracking-wider">Communication Details</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <label class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase">Primary Email</label>
+                    <p class="text-base font-semibold text-slate-900 dark:text-white mt-1">{{ user()?.email }}</p>
+                  </div>
+                  <div>
+                    <label class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase">Mobile Number</label>
+                    <p class="text-base font-semibold text-slate-900 dark:text-white mt-1">+91 {{ user()?.phoneNumber }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Metadata Card -->
+              <div class="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-white/5 p-8 shadow-sm">
+                <div class="flex items-center gap-2 mb-6 text-slate-400 dark:text-slate-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  <h3 class="text-xs font-bold uppercase tracking-wider">System Metadata</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <label class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase">User Reference ID</label>
+                    <p class="text-base font-mono font-semibold text-slate-900 dark:text-white mt-1">#ID-{{ user()?.id }}</p>
+                  </div>
+                  <div>
+                    <label class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase">Account Created</label>
+                    <p class="text-base font-semibold text-slate-900 dark:text-white mt-1">{{ user()?.createdAt | date:'MMMM d, y' }}</p>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </ng-container>
+        </div>
+      </main>
+    </div>
