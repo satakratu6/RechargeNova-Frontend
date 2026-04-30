@@ -5,6 +5,7 @@ import { ThemeSwitcherComponent } from '../../shared/components/theme-switcher/t
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { UserResponse } from '../../core/models/auth.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,11 @@ export class ProfileComponent implements OnInit {
   isLoading = signal(true);
   isUploading = signal(false);
 
-  constructor(private userService: UserService, private authService: AuthService) {}
+  constructor(
+    private userService: UserService, 
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.refresh();
@@ -63,5 +68,10 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
   }
 }
