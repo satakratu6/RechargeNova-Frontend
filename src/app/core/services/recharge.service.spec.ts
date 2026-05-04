@@ -9,6 +9,7 @@ describe('RechargeService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
+    TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       providers: [
         RechargeService,
@@ -51,7 +52,7 @@ describe('RechargeService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/recharges');
+    const req = httpMock.expectOne('/api/recharges');
     expect(req.request.method).toBe('POST');
     req.flush(mockResponse);
   });
@@ -73,7 +74,7 @@ describe('RechargeService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/recharges/1');
+    const req = httpMock.expectOne('/api/recharges/1');
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });
@@ -95,7 +96,7 @@ describe('RechargeService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/recharges/user/1');
+    const req = httpMock.expectOne('/api/recharges/user/1');
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });
@@ -117,7 +118,7 @@ describe('RechargeService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/recharges/admin/all');
+    const req = httpMock.expectOne('/api/recharges/admin/all');
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });

@@ -9,6 +9,7 @@ describe('AuthService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
+    TestBed.resetTestingModule();
     localStorage.clear();
     TestBed.configureTestingModule({
       providers: [
@@ -43,7 +44,7 @@ describe('AuthService', () => {
       expect(service.currentUser()).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/users/login');
+    const req = httpMock.expectOne('/api/users/login');
     expect(req.request.method).toBe('POST');
     req.flush(mockResponse);
   });
@@ -76,7 +77,7 @@ describe('AuthService', () => {
       expect(response).toBeTruthy();
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/users/register');
+    const req = httpMock.expectOne('/api/users/register');
     expect(req.request.method).toBe('POST');
     req.flush({});
   });
@@ -86,7 +87,7 @@ describe('AuthService', () => {
       expect(response).toBe('Email sent');
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/users/forgot-password');
+    const req = httpMock.expectOne('/api/users/forgot-password');
     expect(req.request.method).toBe('POST');
     req.flush('Email sent');
   });
@@ -96,7 +97,7 @@ describe('AuthService', () => {
       expect(response).toBe('Password reset');
     });
 
-    const req = httpMock.expectOne('http://localhost:8989/users/reset-password');
+    const req = httpMock.expectOne('/api/users/reset-password');
     expect(req.request.method).toBe('POST');
     req.flush('Password reset');
   });

@@ -32,6 +32,11 @@ export class LoginComponent {
     return !!f && f.invalid && (f.dirty || f.touched);
   }
 
+  hasError(field: string, error: string): boolean {
+    const control = this.loginForm.get(field);
+    return control ? control.hasError(error) : false;
+  }
+
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;

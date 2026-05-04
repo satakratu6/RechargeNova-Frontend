@@ -12,6 +12,7 @@ describe('LoginComponent', () => {
   let router: Router;
 
   beforeEach(async () => {
+    TestBed.resetTestingModule();
     authService = {
       login: vi.fn()
     };
@@ -118,39 +119,62 @@ describe('LoginComponent', () => {
     expect(component.showPw).toBeFalsy();
   });
 
-  it('should show required error for email in template', () => {
+  it('should show email required error', async () => {
     const email = component.loginForm.get('email');
     email?.markAsTouched();
     email?.setValue('');
     fixture.detectChanges();
-
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent).toContain('Email is required');
   });
 
-  it('should show invalid error for email in template', () => {
+  it('should show email format error', async () => {
     const email = component.loginForm.get('email');
     email?.markAsTouched();
-    email?.setValue('invalid-email');
+    email?.setValue('invalid');
     fixture.detectChanges();
-
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent).toContain('Please enter a valid email');
   });
 
-  it('should show required error for password in template', () => {
+  it('should show password required error', async () => {
     const password = component.loginForm.get('password');
     password?.markAsTouched();
     password?.setValue('');
     fixture.detectChanges();
-
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent).toContain('Password is required');
   });
 
-  it('should show minlength error for password in template', () => {
+  it('should show password minlength error', async () => {
     const password = component.loginForm.get('password');
     password?.markAsTouched();
     password?.setValue('123');
     fixture.detectChanges();
-
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent).toContain('Password must be at least 6 characters');
+  });
+
+  it('should not call authService.login if form is invalid on submit', () => {
+    component.onSubmit();
+    expect(authService.login).not.toHaveBeenCalled();
+    expect(component.isLoading).toBeFalsy();
+  });
+
+  it('should show "Signing in..." when loading', () => {
+    component.loginForm.get('email')?.setValue('test@example.com');
+    component.loginForm.get('password')?.setValue('password');
+    authService.login.mockReturnValue(of({ token: 'mock-token' }));
+    
+    component.isLoading = true;
+    fixture.detectChanges();
+    
+    expect(fixture.nativeElement.textContent).toContain('Signing in...');
+  });
+
+  it('should show "Sign In" when not loading', () => {
+    expect(component.isLoading).toBeFalsy();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Sign In');
   });
 });
