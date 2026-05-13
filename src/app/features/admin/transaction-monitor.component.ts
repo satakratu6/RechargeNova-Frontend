@@ -33,6 +33,7 @@ export class TransactionMonitorComponent implements OnInit {
   
   searchTerm = '';
   limit = 0;
+  isRefreshing = signal(false);
 
   filteredTransactions = computed(() => {
     let result = this.allTransactions();
@@ -64,9 +65,20 @@ export class TransactionMonitorComponent implements OnInit {
   ngOnInit(): void { this.loadAll(); }
 
   loadAll(): void {
+    this.isRefreshing.set(true);
+    // Reset filters on refresh
+    this.searchTerm = '';
+    this.limit = 0;
+    
     this.paymentService.getAllPayments().subscribe({
-      next: (data) => this.allTransactions.set(data),
-      error: (err) => console.error('Error fetching transactions:', err)
+      next: (data) => {
+        this.allTransactions.set(data);
+        setTimeout(() => this.isRefreshing.set(false), 600); // Small delay for UX
+      },
+      error: (err) => {
+        console.error('Error fetching transactions:', err);
+        this.isRefreshing.set(false);
+      }
     });
   }
 

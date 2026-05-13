@@ -12,13 +12,17 @@
               <app-theme-switcher></app-theme-switcher>
               
               <div class="flex items-center gap-[0.75rem]">
-                <select [(ngModel)]="limit" (change)="applyFilters()" class="px-[1rem] py-[0.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[0.75rem] text-[0.75rem] font-black text-slate-600 dark:text-gray-300 uppercase tracking-widest outline-none focus:border-violet-500 cursor-pointer shadow-sm">
-                  <option [value]="0">All Records</option>
-                  <option [value]="30">Last 30</option>
-                  <option [value]="50">Last 50</option>
+                <select [(ngModel)]="limit" (change)="applyFilters()" 
+                  class="px-[1rem] py-[0.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[0.75rem] text-[0.75rem] font-black text-slate-600 dark:text-gray-300 uppercase tracking-widest outline-none focus:border-violet-500 cursor-pointer shadow-sm appearance-none dark:[color-scheme:dark]">
+                  <option [value]="0" class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">All Records</option>
+                  <option [value]="30" class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">Last 30</option>
+                  <option [value]="50" class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">Last 50</option>
                 </select>
-                <button (click)="loadAll()" class="p-[0.625rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[0.75rem] text-slate-400 hover:text-violet-600 dark:hover:text-white transition-all shadow-sm">
-                  <svg class="w-[1.25rem] h-[1.25rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <button (click)="loadAll()" [disabled]="isRefreshing()"
+                  class="p-[0.625rem] bg-white dark:bg-[#0d0720] border border-slate-200 dark:border-white/10 rounded-[0.75rem] text-slate-400 hover:text-violet-600 dark:hover:text-white transition-all shadow-sm disabled:opacity-50">
+                  <svg class="w-[1.25rem] h-[1.25rem]" [class.animate-spin]="isRefreshing()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -29,7 +33,7 @@
           <div class="mb-[2rem] flex flex-col md:flex-row gap-[1rem] items-center justify-between">
             <div class="relative w-full md:w-[24rem]">
               <input type="text" [(ngModel)]="searchTerm" placeholder="Search logs..." 
-                class="w-full pl-[3rem] pr-[1rem] py-[0.875rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[1rem] text-[0.875rem] outline-none focus:border-violet-500 transition-all text-slate-900 dark:text-white shadow-sm">
+                class="w-full pl-[3rem] pr-[1rem] py-[0.875rem] bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-[1rem] text-[0.875rem] outline-none focus:border-violet-500 transition-all text-slate-900 dark:text-white shadow-sm placeholder-slate-400 dark:placeholder-slate-500">
               <svg class="absolute left-[1rem] top-[0.875rem] w-[1.25rem] h-[1.25rem] text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             </div>
             <div class="text-right">
